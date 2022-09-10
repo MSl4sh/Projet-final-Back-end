@@ -1,4 +1,4 @@
-const S = require('mongoose');
+const mongoose = require('mongoose');
 
 const PublicationSchema = new mongoose.Schema({
 

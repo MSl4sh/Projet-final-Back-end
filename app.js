@@ -23,12 +23,14 @@ app.get('/jsonWebTokenId', requireAuth, (req,res) => {
     res.status(200).send(res.locals.user._id)
 })
 
-//routes des utilsateurs
+//routes des utilsateurs.
 
 app.use('/api/user', userRoutes);
+
+//routes des publications.
 app.use('/api/publication', publicationRoutes)
 
-//server express
+//server express.
 
 app.listen(PORT, () =>{
     console.log(`En écoute du port ${PORT}.`);
