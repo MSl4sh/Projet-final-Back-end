@@ -4,12 +4,14 @@ const UserModel = require('../models/user.model');
 const ObjectID= require('mongoose').Types.ObjectId;
 
 
+//Publications.
+
 module.exports.readPublication = (req, res)=> {
 
     PublicationModel.find((err, docs)=>{
         if(!err) res.send(docs); //si pas d'erreurs, on envoie le docs.
         else console.log("Erreur dans l'obtention des données: " + err) //si erreur, affichage dans la console de l'erreur rencontrée.
-    })
+    }).sort({createdAt: -1}); //Trie les publications  de manière à ce qu'elles apparaissent de la plus récente à la plus ancienne.
 
 }
 
@@ -122,4 +124,74 @@ module.exports.unlikePublication = async (req, res)=> {
     
 
     
+}
+
+//commentaires
+
+
+module.exports.commentPublication = (req, res)=> {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send('Id inconnu au bataillon: ' + req.params.id) // vérification de l'id.
+
+    try{
+        return PublicationModel.findByIdAndUpdate(
+            req.params.id,
+            {$push : {  //push des informations en dessous dans le tableau "comment" des publications.
+                comments: {
+                    commenterId : req.body.commenterId,
+                    commenterPseudo: req.body.commenterPseudo,
+                    commentText: req.body.commentText,
+                    timestamp: new Date().getTime()
+                }
+            }
+            },
+            {new: true},
+            (err, docs) => {
+                if(!err) res.send(docs);
+                else return res.status(400).send(err)
+                
+            }
+
+
+        )
+    } catch(err){
+        return res.status(400).send(err)
+    }
+}
+
+
+module.exports.editCommentPublication = (req, res)=> {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send('Id inconnu au bataillon: ' + req.params.id) // vérification de l'id.
+
+    try{
+        return PublicationModel.findById(
+            req.params.id,
+            (err, docs) => {
+                const thisComment = docs.comments.find((comment) => 
+                    comment._id.equals(req.body.commentId) // fait correspondre la constante "this comment" avec l'id du commentaire visé.
+                )
+                
+                if(!thisComment) return res.status(404).send('Commentaire non trouvé')//Vérification de l'existence du commentaire dans la BDD.
+                thisComment.text = req.body.text;
+
+                return docs.save((err) =>{
+                    if(!err) return res.status(200).send(docs);
+                    return res.status(500).send(err);
+                })
+            }
+        )
+
+    }catch(err) {
+        return res.status(400).send(err)
+    }
+
+}
+
+
+module.exports.deleteCommentPublication = async (req, res)=> {
+    if (!ObjectID.isValid(req.params.id))
+        return res.status(400).send('Id inconnu au bataillon: ' + req.params.id) // vérification de l'id.
+
+
 }

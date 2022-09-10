@@ -26,7 +26,7 @@ const PublicationSchema = new mongoose.Schema({
             {
                 commenterId: String,
                 commenterPseudo: String,
-                comment: String,
+                commentText: String,
                 timestamp: Number
             }
         ],
