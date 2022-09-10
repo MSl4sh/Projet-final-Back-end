@@ -73,7 +73,7 @@ module.exports.likePublication = async (req, res)=> {
 
     try{
         await publicationModel.findByIdAndUpdate(
-            req.params.id,//id de la publication 
+            req.params.id,//récupération de l'id de la publication 
             {$addToSet : {likers : req.body.id}},//Ajout de l'id du Liker dans le tableau "likers" de la publication.
             {new:true},
             (err, docs) => {
@@ -81,7 +81,7 @@ module.exports.likePublication = async (req, res)=> {
             }
         )
         await UserModel.findByIdAndUpdate(
-            req.body.id,//id du Liker.
+            req.body.id,//récupération de l'id du Liker.
             {$addToSet : {like : req.params.id}},//ajout de L'id de la publication dans le tableau "Like" du liker.
             (err, docs) => {
                 if(!err) res.send(docs);
@@ -98,7 +98,27 @@ module.exports.likePublication = async (req, res)=> {
 module.exports.unlikePublication = async (req, res)=> {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('Id inconnu au bataillon: ' + req.params.id) // vérification de l'id.
-
+        try{
+            await publicationModel.findByIdAndUpdate(
+                req.params.id,//récupération de l'id de la publication 
+                {$pull : {likers : req.body.id}},//suppression de l'id du Liker dans le tableau "likers" de la publication.
+                {new:true},
+                (err, docs) => {
+                    if(err) return res.status(400).send(err)
+                }
+            )
+            await UserModel.findByIdAndUpdate(
+                req.body.id,//récupération de l'id du Liker.
+                {$pull : {like : req.params.id}},//suppression de L'id de la publication dans le tableau "Like" du liker.
+                (err, docs) => {
+                    if(!err) res.send(docs);
+                    else return res.status(400).send(err)
+                    
+                }
+            )
+        } catch(err){
+            return res.status(400).send(err)
+        }
     
 
     
