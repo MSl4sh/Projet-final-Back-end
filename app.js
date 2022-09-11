@@ -1,5 +1,5 @@
 require('dotenv').config({path:'./config/.env.development'});
-const {PORT} = process.env;
+const {PORT,CLIENT_URL} = process.env;
 require('./config/bdd');
 const {checkUser, requireAuth} = require('./middleware/auth.middleware')
 const express = require('express');
@@ -7,8 +7,17 @@ const bodyParser= require ('body-parser');
 const cookieParser = require ('cookie-parser')
 const userRoutes = require('./routes/user.routes.js');
 const publicationRoutes = require('./routes/publication.routes.js');
+const cors = require('cors')
 const app = express();
 
+
+app.use(cors({corsOption}));
+
+const corsOption ={
+    origin: process.env.CLIENT_URL,
+    credentials:true
+
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
