@@ -2,6 +2,10 @@ const publicationModel = require('../models/publication.model');
 const PublicationModel = require('../models/publication.model');
 const UserModel = require('../models/user.model');
 const ObjectID= require('mongoose').Types.ObjectId;
+const fs = require('fs')// dépendence native de gestion de fichier "file system".
+const { promisify } = require('util');
+const { uploadError } = require('../utils/errors.utils');
+const pipeline = promisify(require('stream').pipeline);
 
 
 //Publications.
@@ -17,9 +21,33 @@ module.exports.readPublication = (req, res)=> {
 
 module.exports.createPublication = async (req, res)=> {
 
+    let fileName;
+
+    if(req.file !== null ){
+        try {
+            if (req.file.detectedMimetype !== "image/jpg" && req.file.detectedMimetype !== "image/jpeg" && req.file.detectedMimetype !== "image/png")// vérification que l'image proposée soit bien au format "jpg","jpeg" ou "png".
+                throw Error("Format d'image non supporté")
+            if (req.file.size >500000) throw Error("Fichier trop volumineux.")// vérification du poids de l'image.
+        }catch(err){
+            const error = uploadError(err)// Appel de la fonction uploadError (utils)
+            return res.status(201).json({error})
+        }
+    
+        fileName = req.body.posterId + Date.now() + '.jpg'
+
+        await pipeline(
+            req.file.stream,
+            fs.createWriteStream(
+                `${_dirname}/../client/public/uploads/publication/${imgName}`//Url du dossier de stockage des images de publication.
+            )
+        );
+
+    }
+
     const newPublication = new PublicationModel({ 
         posterId: req.body.posterId,
         message: req.body.message,
+        picture: req.file !==null ?"./uploads/publication/"+ fileName :"",
         video: req.body.video,
         likers: [],
         comments:[],
