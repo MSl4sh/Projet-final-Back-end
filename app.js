@@ -10,14 +10,14 @@ const publicationRoutes = require('./routes/publication.routes.js');
 const cors = require('cors')
 const app = express();
 
-
-app.use(cors({corsOption}));
-
 const corsOption ={
     origin: process.env.CLIENT_URL,
     credentials:true
 
 }
+app.use(cors({corsOption}));
+
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

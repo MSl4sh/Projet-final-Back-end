@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
+const {BDD} = process.env
 
 mongoose
-    .connect("mongodb+srv://MrSlash:Lyoko001++@cluster0.espuubt.mongodb.net/projetfinal",
+    .connect("mongodb+srv://"+process.env.BDD+"@cluster0.espuubt.mongodb.net/projetfinal",
         {
             useNewUrlParser: true,
             useUnifiedTopology: true,
