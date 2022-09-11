@@ -193,5 +193,23 @@ module.exports.deleteCommentPublication = async (req, res)=> {
     if (!ObjectID.isValid(req.params.id))
         return res.status(400).send('Id inconnu au bataillon: ' + req.params.id) // vérification de l'id.
 
+    try{
+        return PublicationModel.findByIdAndUpdate(
+            req.params.id,// Id de la publication qui contient le commentaire à supprimer.
+            {$pull:{// modification du tableau "comments" de la publication.
+                comments:{
+                    _id: req.body.commenterId,
+                }
+            }},
+            {new : true},
+            (err,docs)=>{
+                if(!err) return res.status(200).send(docs);
+                    return res.status(400).send(err);
+            }
+        )
+    }catch(err){
+        return res.status(400).send(err);
+    };
 
-}
+
+};
