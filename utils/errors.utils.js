@@ -29,3 +29,17 @@ module.exports.logInError = (err) => {
 
     return errors
 }
+
+// Gestion des erreurs dans l'upload des images de profil.
+
+module.exports.uploadError = (err) => {
+    let errors = {format:'', maxSize:''};
+
+    if(err.message.includes("Format d'image non supporté"))// si le format n'est pas bon.
+        errors.format = "Format d'image incorrect!\n L'image doit être au format JPG, JPEG ou PNG."
+
+    if(err.message.includes("Fichier trop volumineux."))// si le poids n'est pas bon.
+        errors.format = "Poids d'image incorrect!\n L'image doit faire max 500ko"
+
+    return errors
+}

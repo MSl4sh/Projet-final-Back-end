@@ -1,6 +1,9 @@
 const router = require('express').Router();
 const authController = require ('../controllers/auth.controller')
 const userController = require ('../controllers/user.controller')
+const uploadController= require ('../controllers/upload.controller')
+const multer = require ('multer')
+const upload = multer()
 
 //routes d'authentification:
 router.post('/register', authController.signUp); //inscription d'un nouvel utilisateur.
@@ -14,5 +17,9 @@ router.put('/:id', userController.update); // modification des données d'un uti
 router.delete('/:id', userController.delete); // supprimer un utilisateur grâce à son ID.
 router.patch('/follow/:id', userController.follow); // Récupère les follows d'un utilisateur grâce à son ID.
 router.patch('/unfollow/:id', userController.unfollow); // Supprime un follow de l'utilisateur grâce à son ID.
+
+//routez d'upload d'images:
+
+router.post('/upload',upload.single('file'),uploadController.uploadProfil)
 
 module.exports = router;
