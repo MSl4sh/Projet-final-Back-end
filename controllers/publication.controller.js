@@ -47,7 +47,7 @@ module.exports.createPublication = async (req, res)=> {
     const newPublication = new PublicationModel({ 
         posterId: req.body.posterId,
         message: req.body.message,
-        picture: req.file !==null ?"./uploads/publication/"+ fileName :"",
+        picture: req.file !==null ?`http://localhost:${PORT}/public/uploads/publication/${fileName}` :"",
         video: req.body.video,
         likers: [],
         comments:[],

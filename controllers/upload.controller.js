@@ -3,6 +3,7 @@ const fs = require('fs')// dépendence native de gestion de fichier "file system
 const { promisify } = require('util');
 const { uploadError } = require('../utils/errors.utils');
 const pipeline = promisify(require('stream').pipeline);
+const {PORT} = process.env
 
 module.exports.uploadProfil = async (req, res) => {
     try {
@@ -25,7 +26,7 @@ module.exports.uploadProfil = async (req, res) => {
     try{
         await UserModel.findByIdAndUpdate(
             req.body.userId,
-            {$set: {img:"./uploads/profil/"+ imgName}},// envoi de l'url de l'image dans le champs "img" de l'utilisateur.
+            {$set: {img:`http://localhost:${PORT}/public/uploads/profil/${imgName}`}},// envoi de l'url de l'image dans le champs "img" de l'utilisateur.
             {new: true, upsert: true, setDefaultsOnInsert:true},
             (err,docs)=>{
                 if(!err) return res.send(docs);

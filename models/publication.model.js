@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const PublicationSchema = new mongoose.Schema({
 
     posterId :{
-        type: String,
+        type: mongoose.Types.ObjectId,
         required: true,
     },
     message:{
@@ -24,10 +24,10 @@ const PublicationSchema = new mongoose.Schema({
     comments:{
         type:[
             {
-                commenterId: String,
+                commenterId: mongoose.Types.ObjectId,
                 commenterPseudo: String,
                 commentText: String,
-                timestamp: Number
+                timestamp: String
             }
         ],
         required: true,
