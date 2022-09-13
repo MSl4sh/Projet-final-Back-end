@@ -23,6 +23,7 @@ app.use(cors({corsOption}));
 
 
 
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -31,7 +32,7 @@ app.use(cookieParser());
 //Verification de l'utilisateur sur toutes les routes.
 app.get('*', checkUser)
 
-//Test du token d'un nouvel utilisateur.
+// Test du token d'un nouvel utilisateur.
 app.get('/jsonWebTokenId', requireAuth, (req,res) => {
     res.status(200).send(res.locals.user._id)
 })

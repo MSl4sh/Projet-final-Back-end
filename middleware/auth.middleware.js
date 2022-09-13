@@ -33,6 +33,7 @@ module.exports.requireAuth = (req, res, next) => {
 
     const token = req.cookies.jsonWebToken
     if(token){
+        console.log("token vérifié")
         jsonWebToken.verify(token, process.env.TOKEN, async (err, docs) => {
             if(err){
                 console.log(err)

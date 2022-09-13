@@ -2,6 +2,7 @@
 //Gestion des erreurs lors de la création d'un nouvel utilisateur.
 
 module.exports.signUpError = (err) => {
+    console.log(err.message)
     let errors = {pseudo:'', email:'', password:''}
 
     if(err.message.includes('pseudo')) // si l'utilisateur entre un pseudo non conforme.
@@ -20,13 +21,11 @@ module.exports.signUpError = (err) => {
 //Gestion des erreurs lors de la connection d'un utilisateur.
 
 module.exports.logInError = (err) => {
-    let errors = { email:'', password:''}
+    let errors = ""
 
-    if(err.message.includes('email'))// si l'utilisateur s'est trompé dans son email.
-        errors.email = 'Email incorrect.'
-    if(err.message.includes('password'))// si l'utilisateur s'est trompé dans son email.
-        errors.password = 'Mot de passe incorrect.'
-
+    if(err.toString().includes('email')||err.toString().includes('password')){
+        errors = 'Votre e-mail et/ou votre mot de passe est incorrect.'
+    }
     return errors
 }
 

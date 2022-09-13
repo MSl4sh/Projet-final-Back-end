@@ -12,6 +12,7 @@ const createToken = (id) =>{
 const authController = {
     signUp : async (req, res) => {
         const {pseudo, email, password}=req.body
+        console.log('coucou')
 
         try {
             const user = await UserModel.create({pseudo, email, password});
@@ -19,6 +20,7 @@ const authController = {
         }
         catch(err){
             const errors= signUpError(err)
+            
             res.status(200).send({errors})
             
         }
@@ -28,14 +30,16 @@ const authController = {
 
         try {
             const user = await UserModel.login(email, password);
+            console.log(user)
             const token = createToken(user._id)
             res.cookie('jsonWebToken', token,{HttpOnly: true, maxAge: maxAge})
             res.status(200).json({user : user._id})
         }
         catch(err){
             const errors = logInError(err)
+            console.log(errors)
             res.status(200).json({errors})
-            console.log(err)
+            
         }
     },
     logOut: async (req, res) => {

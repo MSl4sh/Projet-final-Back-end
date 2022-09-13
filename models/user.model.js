@@ -57,14 +57,15 @@ userSchema.pre("save", async function(next) {
 
 userSchema.statics.login = async function(email, password){
     const user = await this.findOne({email})
-    if (user){
+    if(!user) throw Error('email inconnu')
+    else{
         const auth = await bcrypt.compare(password, user.password)
         if(auth){
             return user;
         }
-        throw Error('mot de passe incorrecte')
+        throw Error('password incorrecte')
     }
-    throw Error('Email incorrecte')
+    
 
 }
 
