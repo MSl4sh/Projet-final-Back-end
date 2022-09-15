@@ -1,10 +1,12 @@
 
 //Gestion des erreurs lors de la création d'un nouvel utilisateur.
 
-module.exports.signUpError = (err) => {
-    console.log(err.message)
-    let errors = {pseudo:'', email:'', password:''}
+const { default: isEmail } = require("validator/lib/isEmail")
 
+module.exports.signUpError = (err) => {
+    let errors = {pseudo:'', email:'', password:''}
+    
+    
     if(err.message.includes('pseudo')) // si l'utilisateur entre un pseudo non conforme.
         errors.pseudo = 'Pseudo incorrect (min: 3 caractères).'
     if(err.message.includes('email'))// si l'utilisateur entre un email non conforme.
@@ -15,6 +17,7 @@ module.exports.signUpError = (err) => {
         errors.pseudo = 'Ce pseudo est déjà enregistré'
     if(err.code===11000 && Object.keys(err.keyValue)[0].includes("email"))// si l'email entré est déjà dans la BDD.
         errors.email = 'Cet email est déjà enregistré'
+    
     return errors
 }
 

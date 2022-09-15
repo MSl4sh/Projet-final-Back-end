@@ -1,6 +1,7 @@
 const UserModel = require("../models/user.model");
 const jsonWebToken = require ('jsonwebtoken');
 const { signUpError, logInError } = require("../utils/errors.utils");
+const { default: isEmail } = require("validator/lib/isEmail");
 const maxAge = 3*24*60*60*1000
 const createToken = (id) =>{
     return jsonWebToken.sign({id}, process.env.TOKEN,{
@@ -12,6 +13,10 @@ const createToken = (id) =>{
 const authController = {
     signUp : async (req, res) => {
         const {pseudo, email, password}=req.body
+        
+        if(req.body.email !=[isEmail]){
+            return res.status(200).send("email invalide")
+        }
         console.log('coucou')
 
         try {
@@ -21,7 +26,8 @@ const authController = {
         catch(err){
             const errors= signUpError(err)
             
-            res.status(200).send({errors})
+            
+            res.status(200).json({errors})
             
         }
     },
@@ -33,7 +39,7 @@ const authController = {
             console.log(user)
             const token = createToken(user._id)
             res.cookie('jsonWebToken', token,{HttpOnly: true, maxAge: maxAge})
-            res.status(200).json({user : user._id})
+            res.status(200).json({user : user._id, token})
         }
         catch(err){
             const errors = logInError(err)
