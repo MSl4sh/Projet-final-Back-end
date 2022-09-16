@@ -14,14 +14,14 @@ const authController = {
     signUp : async (req, res) => {
         const {pseudo, email, password}=req.body
         
-        if(req.body.email !=[isEmail]){
-            return res.status(200).send("email invalide")
-        }
+        
         console.log('coucou')
 
         try {
             const user = await UserModel.create({pseudo, email, password});
-            res.status(201).json({ user: user._id}) // renvoie l'id de l'utilisateur si la requête est passée.
+            const token = createToken(user._id)
+            res.cookie('jsonWebToken', token,{HttpOnly: true, maxAge: maxAge})
+            res.status(201).json({ user: user._id, token}) // renvoie l'id de l'utilisateur si la requête est passée.
         }
         catch(err){
             const errors= signUpError(err)
