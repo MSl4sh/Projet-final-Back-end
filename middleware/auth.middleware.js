@@ -11,7 +11,7 @@ module.exports.checkUser = (req, res, next) => {
         jsonWebToken.verify(token, process.env.TOKEN, async (err, docs) => {
             if(err){
                 res.locals.user = null;
-                res.cookie('jsonWebToken', {maxAge: 1})// si erreur, la durée de vie du token est réduite pour empécher la connexion.
+                // res.cookie('jsonWebToken', {maxAge: 1})// si erreur, la durée de vie du token est réduite pour empécher la connexion.
                 next()
             }
             else {
