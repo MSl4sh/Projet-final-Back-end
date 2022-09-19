@@ -9,8 +9,8 @@ const {Readable} = require('stream')
 
 const uploadController = {
     uploadProfil: async (req, res) => {
-        console.log(req.body)
-        console.log(req.file)
+        console.log("body",req.body)
+        console.log("file",req.file)
 
         try {
             if (req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg" && req.file.mimetype !== "image/png")// vérification que l'image proposée soit bien au format "jpg","jpeg" ou "png".
@@ -21,7 +21,7 @@ const uploadController = {
             return res.status(201).json({ error })
         }
 
-        const imgName = req.body.name+".jpg";
+        const imgName = new Date().getTime()+"-"+req.body.name+".jpg";
 
         // await pipeline(
         //     req.file.stream,
