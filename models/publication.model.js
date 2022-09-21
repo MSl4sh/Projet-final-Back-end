@@ -1,10 +1,12 @@
 const mongoose = require('mongoose');
+const User = require('./user.model');
 
 const PublicationSchema = new mongoose.Schema({
 
     posterId :{
         type: mongoose.Types.ObjectId,
         required: true,
+        ref: User
     },
     message:{
         type: String,

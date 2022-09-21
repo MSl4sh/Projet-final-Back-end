@@ -1,13 +1,13 @@
 const router = require('express').Router();
 const publicationController = require('../controllers/publication.controller')
-const multer = require ('multer')
+const multer = require('multer')
 const upload = multer()
 
 
 //routes de publications.
 
 router.get('/', publicationController.readPublication);//Lire toutes les publications.
-router.post('/',upload.single('file'), publicationController.createPublication);//Créer une nouvelle publication.
+router.post('/', upload.single('file'), publicationController.createPublication);//Créer une nouvelle publication.
 router.put('/:id', publicationController.updatePublication);//Modifier une publication par son Id.
 router.delete('/:id', publicationController.deletePublication);//Supprimer une publication par son Id
 router.patch('/like-publication/:id', publicationController.likePublication)//Liker une publication par son Id.
@@ -22,5 +22,5 @@ router.patch('/delete-comment/:id', publicationController.deleteCommentPublicati
 
 
 
-module.exports= router
+module.exports = router
 
