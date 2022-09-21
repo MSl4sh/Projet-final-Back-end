@@ -56,13 +56,13 @@ const userController = {
     },
     // ajouter un follow à un utilisateur.
     follow : async (req,res) => {
-        if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idToFollow))
+        if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.data))
             return res.status(400).send('Id inconnu au bataillon: ' + req.params.id)
         try{
             //ajout de l'id de l'utilisateur suivi dans la liste des follows
             await UserModel.findByIdAndUpdate(
                 req.params.id,
-                {$addToSet: {follows: req.body.idToFollow}},
+                {$addToSet: {follows: req.body.data}},
                 {new :true, upsert:true },
                 (err, docs) => {
                     if(!err) res.status(201).json(docs);
@@ -71,7 +71,7 @@ const userController = {
             ).clone();
             //ajout de l'id du follower dans la liste des follower de l'utilisateur suivi.
             await UserModel.findByIdAndUpdate(
-                req.body.idToFollow,
+                req.body.data,
                 {$addToSet: {followers : req.params.id}},
                 {new :true, upsert:true },
                 (err, docs) => {

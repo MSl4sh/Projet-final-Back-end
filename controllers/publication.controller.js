@@ -59,8 +59,8 @@ const publicationController = {
         const newPublication = new PublicationModel({ 
             posterId: req.body.posterId,
             message: req.body.message,
-            picture: req.file !==null ?`http://localhost:8080/uploads/publication/${fileName}` :"",
-            video: "",
+            picture: req.file ?`http://localhost:8080/uploads/publication/${fileName}` :"",
+            video: req.body.video,
             likers: [],
             comments:[],
         })
