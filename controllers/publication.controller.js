@@ -29,8 +29,8 @@ const publicationController = {
 
     createPublication : async (req, res)=> {
 
-        // let fileName;
-        // 
+        let fileName;
+        
         if(req.file){
             try {
                 if (req.file.mimetype !== "image/jpg" && req.file.mimetype !== "image/jpeg" && req.file.mimetype !== "image/png")// vérification que l'image proposée soit bien au format "jpg","jpeg" ou "png".
